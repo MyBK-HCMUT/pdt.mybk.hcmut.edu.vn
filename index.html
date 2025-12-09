@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Phòng Đào tạo | myBk</title>
+  <meta name="description" content="Phòng Đào tạo - myBk">
+  <link rel="icon" href="assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css" rel="stylesheet">
+  <style>
+    /* Sử dụng màu xanh đậm của myBk cho biến CSS */
+    :root{--primary:#075385;--sidebar-width:260px} 
+    body{font-family:'Roboto Condensed',sans-serif;background:#f4f6f9;margin:0}
+    .main-header{height:56px;background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px}
+    .logo{color:#fff;text-decoration:none;font-weight:700}
+    #mainWrapper{display:flex;min-height:calc(100vh - 56px)}
+    /* Sidebar background dùng màu xanh đậm myBk */
+    aside{width:var(--sidebar-width);background:var(--primary);color:#fff;padding:12px} /* Đã chỉnh màu chữ sidebar thành trắng */
+    aside .nav-link{color:#fff}
+    aside .nav-link:hover{background:rgba(255,255,255,0.1);text-decoration:none}
+    main{flex:1;padding:16px}
+    footer{padding:12px;text-align:center;background:#fff}
+    @media (max-width:991px){aside{position:fixed;left:-100%;top:56px;height:calc(100% - 56px);z-index:1040;transition:left .25s}aside.show{left:0}}
+    .box-header h2{margin:0}
+    .box-body{padding:12px}
+    .table thead tr{background:#075385;color:#fff}
+    .user-image{object-fit:cover}
+    .user-panel{color:#fff;} /* Đảm bảo thông tin user panel có màu trắng */
+    /* Tùy chỉnh màu alert info thành màu xanh dương nhạt */
+    .alert-info {
+        color: #055160;
+        background-color: #cff4fc;
+        border-color: #b6effb;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <a class="logo d-flex align-items-center" href="#">
+      <img src="assets/logo.png" alt="myBk" style="height:40px; margin-right:10px;">
+      <span class="logo-lg"><b>myBk</b>/app</span>
+    </a>
+    <div class="ms-auto d-flex align-items-center gap-3">
+      <div class="d-none d-md-block text-white">TRẦN UYÊN PHƯƠNG</div>
+      <button class="btn btn-outline-light d-lg-none" id="btnToggleSidebar"><i class="fa fa-bars"></i></button>
+    </div>
+  </header>
+
+  <div id="mainWrapper">
+    <aside id="sidebar" aria-label="Sidebar">
+      <div class="user-panel d-flex align-items-center mb-3">
+        <img src="assets/logo.png" class="rounded-circle me-2" width="48" height="48" alt="logo">
+        <div>
+          <div class="fullName">TRẦN UYÊN PHƯƠNG</div>
+          <small>Khoa Công Nghệ Vật Liệu</small>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav flex-column" id="menuList">
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#menu-sinhvien"><i class="fa fa-navicon me-2"></i> Sinh viên</a>
+            <div class="collapse show" id="menu-sinhvien">
+              <ul class="nav flex-column ms-3">
+                <li class="nav-item"><a class="nav-link small" href="#" data-tab="tab_StudentInfo">Thông tin sinh viên</a></li>
+                <li class="nav-item"><a class="nav-link small" href="#" data-tab="tab_Timetable">Thời khóa biểu</a></li>
+                <li class="nav-item"><a class="nav-link small" href="#" data-tab="tab_Exam">Lịch thi</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#menu-dichvu"><i class="fa fa-navicon me-2"></i> Dịch vụ sinh viên</a>
+            <div class="collapse" id="menu-dichvu">
+              <ul class="nav flex-column ms-3">
+                <li class="nav-item"><a class="nav-link small" href="#" data-tab="tab_Service1">Đăng ký phúc tra</a></li>
+                <li class="nav-item"><a class="nav-link small" href="#" data-tab="tab_Service2">Kiểm tra tốt nghiệp</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="#" data-tab="tab_Result"><i class="fa fa-navicon me-2"></i> Kết quả học tập</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-tab="tab_QnA"><i class="fa fa-question-circle me-2"></i> Lịch sử hỏi/đáp</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-tab="tab_Activities"><i class="fa fa-users me-2"></i> Hoạt động ngoại khóa</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-tab="tab_Tuition"><i class="fa fa-book me-2"></i> Học phí - BKPay2</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main id="contentArea">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h4 id="pageTitle">Hệ thống quản lý</h4>
+          <small id="pageSubtitle">Quản lý người dùng</small>
+        </div>
+        <div>
+          <button class="btn btn-outline-secondary" id="btnBack"><i class="fa fa-arrow-left"></i> Trở về trang trước</button>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_StudentInfo">Thông tin sinh viên</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_StudentProfile">Hồ sơ sinh viên</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_StudentStatusDecision">Tình trạng/Quyết định</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_StudentClass">Thông tin Lớp và GVCN</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_HealthInsurance">Thông tin y tế</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabCourseRegResult">Kết quả đăng ký môn học</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabTuitionFeesHistory">Lịch sử thanh toán học phí</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabQnAHistory">Lịch sử hỏi/đáp</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabActivities">Hoạt động ngoại khóa</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabTrainingPoints">Điểm rèn luyện</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tabScholarship">Học bổng - Khuyến khích</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab_Tuition">Học phí - BKPay2</a></li>
+      </ul>
+
+      <div class="tab-content p-3 bg-white border mt-2" style="min-height:400px">
+        <!-- ===================== LỊCH THI ===================== -->
+<div class="tab-pane fade" id="tab_Exam">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="#">Trang thông tin</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Lịch thi</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <h3 class="text-center text-danger">LỊCH KIỂM TRA - THI HỌC KỲ</h3>
+    <h5 class="text-center text-danger mb-3">20251 - Học kỳ 1 Năm học 2025 - 2026</h5>
+    <p class="text-end fst-italic"><small>Cập nhật cuối: 2025-11-06 14:11:00</small></p>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-striped table-hover" style="width:100%; font-size: 0.9rem;">
+            <thead style="background:#075385;color:white; vertical-align: middle;">
+                <tr>
+                    <th>Học kỳ</th>
+                    <th>Môn học</th>
+                    <th>Nhóm lớp</th>
+                    <th>Ngày thi</th>
+                    <th>Loại thi</th>
+                    <th>Cơ sở</th>
+                    <th>Mã phòng</th>
+                    <th>Thứ</th>
+                    <th>Giờ bắt đầu</th>
+                    <th>Tổng số phút</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>20251</td>
+                    <td>SP1033 - Kinh tế chính trị Mác Lênin</td>
+                    <td>L09_B_Thi</td>
+                    <td>2025-12-22</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H6-308</td>
+                    <td>2</td>
+                    <td>07:00</td>
+                    <td>50</td>
+                <tr>
+                    <td>20251</td>
+                    <td>SP1037 - Tư tưởng đường lối Hồ Chí Minh</td>
+                    <td>L05_A_Thi</td>
+                    <td>2025-12-23</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H6-604</td>
+                    <td>2</td>
+                    <td>09:00</td>
+                    <td>50</td>
+                <tr>
+                    <td>20251</td>
+                    <td>CH1002 - Hóa đại cương</td>
+                    <td>L07_A_Thi</td>
+                    <td>2025-12-25</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H1-105</td>
+                    <td>3</td>
+                    <td>07:00</td>
+                    <td>70</td>
+                <tr>
+                    <td>20251</td>
+                    <td>CH1003 - Hóa mỹ phẩm</td>
+                    <td>L02_B_Thi</td>
+                    <td>2025-12-25</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H6-501</td>
+                    <td>3</td>
+                    <td>09:00</td>
+                    <td>70</td>
+                <tr>
+                    <td>20251</td>
+                    <td>MA2007 - Hóa học Polyme</td>
+                    <td>L01_A_Thi</td>
+                    <td>2025-12-27</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H2-308</td>
+                    <td>3</td>
+                    <td>09:00</td>
+                    <td>90</td>
+                <tr>
+                    <td>20251</td>
+                    <td>MA2015 - Hóa lý Polimer</td>
+                    <td>L01_B_Thi</td>
+                    <td>2025-12-27</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H2-401</td>
+                    <td>3</td>
+                    <td>15:00</td>
+                    <td>90</td>
+                <tr>
+                    <td>20251</td>
+                    <td>MA3101 - Truyền nhiệt truyền khối</td>
+                    <td>L01_A_Thi</td>
+                    <td>2025-12-28</td>
+                    <td>CK</td>
+                    <td>BK-DĩAn</td>
+                    <td>H2-202</td>
+                    <td>3</td>
+                    <td>09:00</td>
+                    <td>120</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- ===================== HẾT LỊCH THI ===================== -->
+
+        <div class="tab-pane fade" id="tab_StudentInfo">
+                            <div style="text-align: right;">
+                                <label style="font-style: italic;">Thời điểm cập nhật gần nhất:</label>
+                                <span id="info_lastUpdatedAt">--</span>
+                            </div>
+                            <aside><b>Thông tin cá nhân</b></aside>
+                            <div class="row">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2" style="min-width: 100px;">
+                                    <div class="form-group" style="text-align: center;">
+                                        <img style="width: 100%; max-width: 180px;" id="imageCard" src="" alt="">
+                                        <label style="font-style: italic;">Thời điểm cập nhật ảnh thẻ gần
+                                            nhất:</label>
+                                        <span id="imageLastUpdatedAt"><img src="assets/student.jpg" alt="Ảnh thẻ sinh viên" style="width:200px;">
+</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 col-md-9">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Mã số sinh viên</b></label>
+                                                <p id="mssv">2212706</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Họ tên lót</b></label>
+                                                <p id="lastName">Trần Uyên</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Tên</b></label>
+                                                <p id="firstName">Phương</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Ngày sinh</b></label>
+                                                <p id="dateOfBirth">11-06-2004</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Giới tính</b></label>
+                                                <p id="gender">Nữ</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Số CCCD</b></label>
+                                                <p id="idCardNumber">079304015713</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Ngày cấp CCCD</b></label>
+                                                <p id="idCardDate">03-01-2022</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3">
+                                            <div class="form-group">
+                                                <label><b>Nơi cấp CCCD</b></label>
+                                                <p id="idCardPlace">Thành phố Hồ Chí Minh</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside><b>Thông tin liên lạc</b></aside>
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label><b>Số điện thoại</b></label>
+                                        <p id="info_phoneNumber">0774713004</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label><b>Email sinh viên</b></label>
+                                        <p id="orgEmail">phuong.trandon1106@hcmut.edu.vn</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label><b>Email liên lạc</b></label>
+                                        <p id="personalEmail">tranuyenphuong30000@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label><b>Email dự phòng</b></label>
+                                        <p id="secondEmail">tranuyenphuong30000@gmail.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside><b>Thông tin đào tạo</b></aside>
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Khoa</b></label>
+                                        <p id="teachingDep">Khoa Công Nghệ Vật Liệu</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Đơn vị quản lý</b></label>
+                                        <p id="trainingManagementDep">Khoa Công Nghệ Vật Liệu</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Mã lớp</b></label>
+                                        <p id="classCode">VL2202</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Thời điểm nhập học</b></label>
+                                        <p id="startTime">10/2023</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Năm CTĐT</b></label>
+                                        <p id="applyForYear">2023</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Số HK gia hạn</b></label>
+                                        <p id="extendedSemester">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Số HK giảm</b></label>
+                                        <p id="numOfSemesterReduced">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Số HK đào tạo (Chuẩn)</b></label>
+                                        <p id="totalSemester">8</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Số HK đào tạo (Tối đa)</b></label>
+                                        <p id="totalSemesterMax">12</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>HK bắt đầu</b></label>
+                                        <p id="semesterStart">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Đào tạo đến HK (Chuẩn)</b></label>
+                                        <p id="semesterTrainingTime">20262</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Đào tạo đến HK (Tối đa)</b></label>
+                                        <p id="semesterTrainingTimeMax">20282</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Thời điểm tốt nghiệp (Chuẩn)</b></label>
+                                        <p id="graduationTime">10/2027</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Thời điểm tốt nghiệp (Tối đa)</b></label>
+                                        <p id="graduationTimeMax">10/2029</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Bậc đào tạo</b></label>
+                                        <p id="trainingLevel">Đại học</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Hệ đào tạo</b></label>
+                                        <p id="trainingType">Chính quy</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Ngành đào tạo</b></label>
+                                        <p id="major">Chuyên ngành: VL4 - Vật liệu Polyme - Polyme CNC</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Loại hình đào tạo</b></label>
+                                        <p id="trainingForms">Chính quy</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Chương trình</b></label>
+                                        <p id="program">Chương trình Đại học tiêu chuẩn</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Đào tạo ở Cơ Sở</b></label>
+                                        <p id="campus">ĐHBK CS2 - Đông Hòa</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Đào tạo ở địa phương</b></label>
+                                        <p id="localTraining">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Buổi đào tạo</b></label>
+                                        <p id="trainingSession">--</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label><b>Tình trạng sinh viên</b></label>
+                                        <p id="status">Đang học</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside><b>Thông tin tốt nghiệp</b></aside>
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Ngành</label>
+                                        <p id="majorGraduated">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Năm học, học kỳ</label>
+                                        <p id="semesterYearGraduated">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Số quyết định</label>
+                                        <p id="graduationDecisionNumber">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Ngày quyết định</label>
+                                        <p id="graduationDecisionDate">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside><b>Thông tin tài khoản</b></aside>
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Tài khoản BKNET</label>
+                                        <p id="bknet">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Số tài khoản ngân hàng</label>
+                                        <p id="bankAccountNumber">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Tên ngân hàng</label>
+                                        <p id="bank">--</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label>OCB CIF</label>
+                                        <p id="ocbCif">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside><b>Thông tin khác</b></aside>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label>Ghi chú</label>
+                                        <p id="note">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+        <div class="tab-pane fade" id="tab_Timetable">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                  <li class="breadcrumb-item"><a href="#">Trang thông tin</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Thời khóa biểu</li>
+                </ol>
+              </nav>
+            </div>
+            <div>
+              <button class="btn btn-outline-secondary btn-sm"><i class="fa fa-print"></i> In</button>
+              <button class="btn btn-outline-primary btn-sm"><i class="fa fa-refresh"></i> Cập nhật</button>
+            </div>
+          </div>
+        
+          <div class="mb-3">
+            <div><strong>Họ và tên:</strong> TRẦN UYÊN PHƯƠNG</div>
+            <div><strong>Mã số SV:</strong> 2212706</div>
+            <div><strong>Mã lớp:</strong> VL2202</div>
+          </div>
+        
+          <h3 class="text-center text-danger">THỜI KHÓA BIỂU HỌC KỲ</h3>
+          <h5 class="text-center text-danger mb-3">Năm học 2025 - 2026 / Học Kỳ 1</h5>
+          <p class="text-end fst-italic"><small>Cập nhật cuối: 14/09/2025</small></p>
+        
+          <div class="alert alert-info" style="font-size: 0.9rem;">
+            <p class="mb-1">
+              <strong>Ghi chú:</strong> <span class="badge bg-warning text-dark">Lý thuyết</span>, <span class="badge bg-success">Thực hành/Thí nghiệm</span>, <span class="badge bg-info text-dark">Bài tập</span>. 
+              <br>Vui lòng kiểm tra kỹ các thông báo từ Phòng Đào tạo về thay đổi phòng học, giờ học.
+            </p>
+          </div>
+        
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped table-hover" style="width:100%; font-size: 0.9rem;">
+              <thead style="background:#075385;color:white; vertical-align: middle;">
+                <tr>
+                  <th rowspan="2">Stt</th>
+                  <th rowspan="2">Mã môn học</th>
+                  <th rowspan="2">Tên môn học</th>
+                  <th rowspan="2">Tín chỉ</th>
+                  <th rowspan="2">Nhóm - Tổ</th>
+                  <th rowspan="2">Thứ</th>
+                  <th colspan="2" class="text-center">Thời gian học</th>
+                  <th rowspan="2">Phòng học</th>
+                  <th rowspan="2">Cơ sở</th>
+                  <th rowspan="2">Tuần</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Tiết</th>
+                    <th class="text-center">Giờ học</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background-color: #cff4fc;"> 
+                    <td>1</td>
+                    <td>SP1033</td>
+                    <td>Kinh tế Chính trị Mác - Lênin (BT)</td>
+                    <td>2</td>
+                    <td>L09</td>
+                    <td>2</td>
+                    <td>2 - 3</td>
+                    <td>7:00 - 8:50</td>
+                    <td>H6-301</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                <tr style="background-color: #cff4fc;"> 
+                    <td>2</td>
+                    <td>MA2007</td>
+                    <td>Hóa học Polyme (BT)</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>2</td>
+                    <td>4 - 5</td>
+                    <td>9:00 - 10:50</td>
+                    <td>H6-101</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                <tr style="background-color: #d1e7dd;"> 
+                    <td>3</td>
+                    <td>MA2015</td>
+                    <td>Hóa lý Polimer</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>2</td>
+                    <td>8 -10</td>
+                    <td>13:00 - 15:50</td>
+                    <td>H6 - 302</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|43|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                 <tr style="background-color: #d1e7dd;"> 
+                    <td>4</td>
+                    <td>CH1003</td>
+                    <td>Hóa mỹ phẩm</td>
+                    <td>3</td>
+                    <td>L02</td>
+                    <td>2</td>
+                    <td>11 - 12</td>
+                    <td>16:00 - 17:50</td>
+                    <td>H6 - 801</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>5</td>
+                    <td>SP1003</td>
+                    <td>Kinh tế Chính trị Mác - Lênin</td>
+                    <td>2</td>
+                    <td>L09</td>
+                    <td>3</td>
+                    <td>2 - 3</td>
+                    <td>7:00 - 8:50</td>
+                    <td>H6 - 202</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>6</td>
+                    <td>MA2007</td>
+                    <td>Hóa học Polime</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>3</td>
+                    <td>4 - 5</td>
+                    <td>9:00 - 10:50</td>
+                    <td>H2 - 801</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|43|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>7</td>
+                    <td>MA3101</td>
+                    <td>Truyền nhiệt và truyền khối</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>3</td>
+                    <td>7 - 10</td>
+                    <td>12:00 - 15:50</td>
+                    <td>H3 - 801</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|43|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>8</td>
+                    <td>CH1002</td>
+                    <td>Hóa đại cương</td>
+                    <td>3</td>
+                    <td>L07</td>
+                    <td>3</td>
+                    <td>11 - 12</td>
+                    <td>15:00 - 17:50</td>
+                    <td>H6 - 301</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>9</td>
+                    <td>SP1037</td>
+                    <td>Tư tưởng đường lối Hồ Chí Minh (BT)</td>
+                    <td>2</td>
+                    <td>L05</td>
+                    <td>4</td>
+                    <td>2 - 3</td>
+                    <td>7:00 - 8:50</td>
+                    <td>H6 - 211</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>10</td>
+                    <td>MA2015</td>
+                    <td>Hóa lý Polymer (BT)</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>4</td>
+                    <td>4 - 5</td>
+                    <td>9:00 - 10:50</td>
+                    <td>H6 - 307</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">35|26|37|38|39|40|41|42|43|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>11</td>
+                    <td>MA3121</td>
+                    <td>Thí nghiệm Hóa học Polime</td>
+                    <td>1</td>
+                    <td>L02</td>
+                    <td>5</td>
+                    <td>2 - 6</td>
+                    <td>7:00 - 11:50</td>
+                    <td>C4 - 103</td>
+                    <td>BKLyThuongKiet</td>
+                    <td><span class="badge bg-success">40|41|42|43|44|45|</span></td>
+                </tr>
+                   <tr style="background-color: #d1e7dd;"> 
+                    <td>12</td>
+                    <td>MA3123</td>
+                    <td>Thí nghiệm Hóa lý Polimer</td>
+                    <td>1</td>
+                    <td>L01</td>
+                    <td>5</td>
+                    <td>8 - 12</td>
+                    <td>13:00 - 17:50</td>
+                    <td>C4 - 103</td>
+                    <td>BKLyThuongKiet</td>
+                    <td><span class="badge bg-success">40|41|42|43|44|45|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>13</td>
+                    <td>CH1002</td>
+                    <td>Hóa đại cương (TN)</td>
+                    <td>3</td>
+                    <td>L02</td>
+                    <td>5</td>
+                    <td>2 - 6</td>
+                    <td>7:00 - 11:50</td>
+                    <td>H6 - 301</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-success">46|47|48|49|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>14</td>
+                    <td>CH1003</td>
+                    <td>Hóa mỹ phẩm (TN)</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>5</td>
+                    <td>8 - 12</td>
+                    <td>13:00 - 17:50</td>
+                    <td>H2 - 005</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-success">46|47|48|49|</span></td>
+                </tr>
+                   <tr style="background-color: #d1e7dd;"> 
+                    <td>15</td>
+                    <td>SP1037</td>
+                    <td>Tư tưởng đường lối Hồ Chí Minh</td>
+                    <td>2</td>
+                    <td>L05</td>
+                    <td>6</td>
+                    <td>2 - 3</td>
+                    <td>7:00 - 8:50</td>
+                    <td>H6 - 103</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>16</td>
+                    <td>CH1003</td>
+                    <td>Hóa mỹ phẩm (BT)</td>
+                    <td>3</td>
+                    <td>L02</td>
+                    <td>6</td>
+                    <td>4 - 5</td>
+                    <td>9:00 - 10:50</td>
+                    <td>H3 - 505</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>17</td>
+                    <td>MA3101</td>
+                    <td>Truyền nhiệt và truyền khối</td>
+                    <td>3</td>
+                    <td>L01</td>
+                    <td>6</td>
+                    <td>7 - 10</td>
+                    <td>12:00 - 15:50</td>
+                    <td>H2 - 601</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-warning text-dark">35|26|37|38|39|40|41|42|43|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>18</td>
+                    <td>CH1002</td>
+                    <td>Hóa đại cương (BT)</td>
+                    <td>3</td>
+                    <td>L07</td>
+                    <td>6</td>
+                    <td>11 - 12</td>
+                    <td>16:00 - 15:50</td>
+                    <td>H6 - 303</td>
+                    <td>BKDiAn</td>
+                    <td><span class="badge bg-info text-dark">35|26|37|38|39|40|41|42|--|44|45|46|47|48|49|50|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>19</td>
+                    <td>LA1010</td>
+                    <td>Anh văn 5A</td>
+                    <td>0</td>
+                    <td>L09</td>
+                    <td>7</td>
+                    <td>3 - 4</td>
+                    <td>8:00 - 9:50</td>
+                    <td>C4 - 401</td>
+                    <td>BKLyThuongKiet</td>
+                    <td><span class="badge bg-warning text-dark">49|50|51|52|1|2|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>20</td>
+                    <td>LA1010</td>
+                    <td>Anh văn 5A</td>
+                    <td>0</td>
+                    <td>L09</td>
+                    <td>7</td>
+                    <td>12 - 13</td>
+                    <td>15:00 - 16:50</td>
+                    <td>C4 - 401</td>
+                    <td>BKLyThuongKiet</td>
+                    <td><span class="badge bg-warning text-dark">49|50|51|52|1|2|</span></td>
+                </tr>
+                  <tr style="background-color: #d1e7dd;"> 
+                    <td>21</td>
+                    <td>LA1010</td>
+                    <td>Anh văn 5A</td>
+                    <td>0</td>
+                    <td>L09</td>
+                    <td>8</td>
+                    <td>3 - 4</td>
+                    <td>8:00 - 9:50</td>
+                    <td>C4 - 401</td>
+                    <td>BKLyThuongKiet</td>
+                    <td><span class="badge bg-warning text-dark">49|50|51|52|1|2|</span></td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="tab_StudentProfile">
+          <div class="box-header text-center"><h2 class="box-title"><strong>HỒ SƠ SINH VIÊN</strong></h2></div>
+          <div class="box-body">Đang cập nhật</div>
+        </div>
+
+        <div class="tab-pane fade" id="tab_StudentStatusDecision">
+          <div class="box-header text-center"><h2 class="box-title"><strong>TÌNH TRẠNG / QUYẾT ĐỊNH</strong></h2></div>
+          <div class="box-body">Đang cập nhật</div>
+        </div>
+
+        <div class="tab-pane fade" id="tab_StudentClass">
+          <div class="box-header text-center"><h2 class="box-title"><strong>THÔNG TIN LỚP VÀ GVCN</strong></h2></div>
+          <div class="box-body">
+            <table class="table table-bordered table-striped table-hover" id="tblStudentClass" style="width:100%">
+              <thead>
+                <tr style="background:#075385;color:white">
+                  <th>NHHK</th><th>MÃ LỚP</th><th>MÃ KHỐI NGÀNH</th><th>NĂM CTDT</th><th>KHOA</th><th>GVCN</th><th>EMAIL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>251</td><td>VL2202</td><td>VL4</td><td>2023</td><td>Khoa Công nghệ Vật liệu</td><td>Huỳnh Công Khanh</td><td>hckhanh@hcmut.edu.vn</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab_HealthInsurance">
+          <div class="box-header text-center"><h2 class="box-title"><strong>THÔNG TIN Y TẾ</strong></h2></div>
+          <div class="box-body">
+            <button class="btn btn-primary" id="updateHealthInsurance">Đang cập nhật</button>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tabCourseRegResult">
+          <div class="box-header text-center"><h2 class="box-title"><strong>KẾT QUẢ ĐĂNG KÝ MÔN HỌC</strong></h2></div>
+          <div class="box-body">
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tabTuitionFeesHistory">
+          <div class="box-header text-center"><h2 class="box-title"><strong>LỊCH SỬ THANH TOÁN HỌC PHÍ</strong></h2></div>
+          <div class="box-body">
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tabQnAHistory">
+          <div class="box-header text-center"><h2 class="box-title"><strong>LỊCH SỬ HỎI/ĐÁP</strong></h2></div>
+          <div class="box-body">Đang cập nhật</div>
+        </div>
+
+        <div class="tab-pane fade" id="tabActivities"><div class="box-body">Đang cập nhật</div></div>
+        <div class="tab-pane fade" id="tabTrainingPoints"><div class="box-body">Đang cập nhật</div></div>
+
+        <div class="tab-pane fade" id="tabScholarship">
+          <div class="box-header text-center"><h2 class="box-title"><strong>HỌC BỔNG - KHUYẾN KHÍCH</strong></h2></div>
+          <div class="box-body">Đang cập nhật</div>
+        </div>
+
+        
+        <div class="tab-pane fade" id="tab_Tuition">
+          <div class="box-header text-center"><h2 class="box-title"><strong>HỌC PHÍ - BKPay2</strong></h2></div>
+          <div class="box-body">
+            <div class="d-flex justify-content-between mb-2">
+              <div>
+                <label>Trình bày</label>
+                <select id="rowsPerPage" class="form-select d-inline-block" style="width:80px">
+                  <option>10</option><option>25</option><option>50</option>
+                </select>
+                <span> dòng/trang</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <label class="me-2">Tìm kiếm:</label>
+                <input id="tuitionSearch" class="form-control" style="width:220px" placeholder="">
+              </div>
+            </div>
+
+            <table class="table table-bordered table-striped table-hover" id="tblTuition" style="width:100%">
+              <thead>
+                <tr style="background:#075385;color:white">
+                  <th style="width:80px">#</th>
+                  <th>Mã khoản thu</th>
+                  <th>Học kỳ</th>
+                  <th>Nội dung thu</th>
+                  <th>[1] Số tiền học phí (VNĐ)</th>
+                  <th>[2] Số tiền được trừ (VNĐ)</th>
+                  <th>[3] Số tiền đã nộp (VNĐ)</th>
+                  <th>[4] Số tiền phải nộp (VNĐ)</th>
+                  <th>Thời hạn nộp</th>
+                  <th>Trạng thái</th>
+                  <th>Nộp vào lúc</th>
+                  <th>Cập nhật cuối cùng vào lúc</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>PDTBHYT2026.2212706</td>
+                  <td>Học kỳ 1 Năm học 2025 - 2026</td>
+                  <td>BHYT Sinh viên 12 tháng</td>
+                  <td class="text-end">631.800</td>
+                  <td class="text-end">0</td>
+                  <td class="text-end">631.800</td>
+                  <td class="text-end">0</td>
+                  <td>01/11/2025 00:00 - 30/11/2025 00:00</td>
+                  <td>Đã nộp</td>
+                  <td>13/11/2025 12:55</td>
+                  <td>13/11/2025 12:55</td>
+                <tr>
+                  <td></td>
+                  <td>PDTDDH20251.11.2212706</td>
+                  <td>Học kỳ 1 Năm học 2025 - 2026</td>
+                  <td>học phí đại học chính quy học kỳ 251</td>
+                  <td class="text-end">15.015.000</td>
+                  <td class="text-end">0</td>
+                  <td class="text-end">15.015.000</td>
+                  <td class="text-end">0</td>
+                  <td>11/11/2025 15:00 - 28/11/2025 00:00</td>
+                  <td>Đã nộp</td>
+                  <td>13/11/2025 12:57</td>
+                  <td>13/11/2025 12:57</td>
+                <tr>
+                  <td></td>
+                  <td>PDTDDH20243.07.2212706</td>
+                  <td>Học kỳ 3 Năm học 2024 - 2025</td>
+                  <td>học phí đại học chính quy học kỳ 243</td>
+                  <td class="text-end">10.218.000</td>
+                  <td class="text-end">0</td>
+                  <td class="text-end">10.218.000</td>
+                  <td class="text-end">0</td>
+                  <td></td>
+                  <td>Đã nộp</td>
+                  <td>14/10/2025 14:49</td>
+                  <td>14/10/2025 14:49</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab_Result">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                  <li class="breadcrumb-item"><a href="#">Trang thông tin</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Kết quả học tập</li>
+                </ol>
+              </nav>
+            </div>
+            <div>
+              <button class="btn btn-outline-secondary btn-sm"><i class="fa fa-print"></i> In</button>
+              <button class="btn btn-outline-primary btn-sm"><i class="fa fa-refresh"></i> Cập nhật</button>
+            </div>
+          </div>
+        
+          <div class="mb-3">
+            <div><strong>Họ và tên:</strong> TRẦN UYÊN PHƯƠNG</div>
+            <div><strong>Mã số SV:</strong> 2212706</div>
+            <div><strong>Mã lớp:</strong> VL2202</div>
+          </div>
+        
+          <h3 class="text-center text-danger">BẢNG ĐIỂM</h3>
+          <h5 class="text-center text-danger mb-3">Năm học 2025 - 2026 / Học Kỳ 1</h5>
+          <p class="text-end fst-italic"><small>Cập nhật cuối: 20/10/2025 17:08</small></p>
+        
+          <div class="alert alert-info" style="font-size: 0.9rem;">
+            <p class="mb-1"><strong>Các điểm đặc biệt:</strong> CT = Cấm thi, VT = Vắng thi, CH = Chưa có điểm, RT = Rút môn học, KD = Không đạt, VP = Vắng thi có phép, DT = Điểm đạt, HT = Hoãn thi, MT = Miễn điểm.
+            <br><strong>Điểm hệ 4</strong> áp dụng từ Khóa 2021.</p>
+            <br><strong>Tình trạng điểm:</strong></p>
+            <ul class="mb-0">
+              <li><strong>Hủy điểm:</strong> Giảng viên đang trong quá trình chỉnh sửa điểm (đã cập nhật trên hệ thống), nhưng chưa hoàn tất việc nộp bảng điểm chính thức về Phòng Khảo thí và Đảm bảo chất lượng.</li>
+              <li><strong>Tạm tính:</strong> Giảng viên đã hoàn tất việc nhập điểm trên hệ thống, tuy nhiên vẫn chưa nộp bảng điểm chính thức cho Phòng Khảo thí và Đảm bảo chất lượng.</li>
+            </ul>
+          </div>
+        
+          <ul class="nav nav-tabs" id="transcriptTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="bang-diem-tab" data-bs-toggle="tab" data-bs-target="#bang-diem-pane" type="button" role="tab" aria-controls="bang-diem-pane" aria-selected="true">Bảng điểm</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tuong-duong-tab" data-bs-toggle="tab" data-bs-target="#tuong-duong-pane" type="button" role="tab" aria-controls="tuong-duong-pane" aria-selected="false">Môn học xét tương đương</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="diem-khac-tab" data-bs-toggle="tab" data-bs-target="#diem-khac-pane" type="button" role="tab" aria-controls="diem-khac-pane" aria-selected="false">Danh mục các điểm khác</button>
+            </li>
+          </ul>
+        
+          <div class="tab-content" id="transcriptTabsContent">
+            <div class="tab-pane fade show active" id="bang-diem-pane" role="tabpanel" aria-labelledby="bang-diem-tab">
+              <div class="table-responsive mt-3">
+                
+                <table class="table table-bordered table-striped table-hover" style="width:100%; font-size: 0.9rem;">
+                  <thead style="background:#075385;color:white; vertical-align: middle;">
+                    <tr>
+                      <th>Stt</th>
+                      <th>Mã môn học</th>
+                      <th>Tên môn học</th>
+                      <th>Điểm tổng kết</th>
+                      <th>Đạt</th>
+                      <th>Tín chỉ</th>
+                      <th>Điểm thành phần</th>
+                      <th>Nhóm</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                       <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2025 - 2026 / Học kỳ 1</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="3" class="text-end">Tổng kết</td>
+                      <td>Tích lũy học kỳ: </td>
+                      <td>Tín chỉ tích lũy học kỳ: </td>
+                      <td colspan="2">Tích lũy chung: </td>
+                      <td colspan="2">Tín chỉ tích lũy chung: </td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;"> <td>1</td>
+                      <td>SP1033</td>
+                      <td>Kinh tế chính trị Mác - Lênin</td>
+                      <td></td>
+                      <td></td>
+                      <td>2</td>
+                      <td></td>
+                      <td>L09</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>2</td>
+                      <td>MA2007</td>
+                      <td>Hóa học Polyme</td>
+                      <td></td>
+                      <td></td>
+                      <td>3</td>
+                      <td></td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>3</td>
+                      <td>MA2015</td>
+                      <td>Hóa lý Polymer</td>
+                      <td></td>
+                      <td></td>
+                      <td>3</td>
+                      <td></td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>4</td>
+                      <td>CH1003</td>
+                      <td>Hóa mỹ phẩm</td>
+                      <td></td>
+                      <td></td>
+                      <td>3</td>
+                      <td></td>
+                      <td>L02</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>5</td>
+                      <td>MA3101</td>
+                      <td>Truyền nhiệt truyền khối</td>
+                      <td></td>
+                      <td></td>
+                      <td>3</td>
+                      <td></td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>6</td>
+                      <td>CH1002</td>
+                      <td>Hóa đại cương</td>
+                      <td></td>
+                      <td></td>
+                      <td>3</td>
+                      <td></td>
+                      <td>L07</td>
+                      <td></td>
+                    </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>7</td>
+                      <td>SP1037</td>
+                      <td>Tư tưởng đường lối Hồ Chí Minh</td>
+                      <td></td>
+                      <td></td>
+                      <td>2</td>
+                      <td></td>
+                      <td>L05</td>
+                      <td></td>
+                     </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>8</td>
+                      <td>MA3121</td>
+                      <td>Thí nghiệm Hóa học Polime</td>
+                      <td>8.7</td>
+                      <td>A</td>
+                      <td>3</td>
+                      <td>BC: 9, TT: 10, Thi: 8</td>
+                      <td>L07</td>
+                      <td></td>
+                     </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>9</td>
+                      <td>MA3123</td>
+                      <td>Thí nghiệm Hóa lý Polimer </td>
+                      <td>8.4</td>
+                      <td>A</td>
+                      <td>3</td>
+                      <td>BC: 8, TT: 10, Thi: 8</td>
+                      <td>L07</td>
+                      <td></td>
+                    </tr>
+                      <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2024 - 2025 / Học kỳ 3</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="3" class="text-end">Tổng kết</td>
+                      <td>Tích lũy học kỳ: 3.3</td>
+                      <td>Tín chỉ tích lũy học kỳ: 12</td>
+                      <td colspan="2">Tích lũy chung: 2.1</td>
+                      <td colspan="2">Tín chỉ tích lũy chung: 71</td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;"> <td>1</td>
+                      <td>MT1003</td>
+                      <td>Giải tích 1</td>
+                      <td>8.6</td>
+                      <td>A</td>
+                      <td>4</td>
+                      <td>KT: 9, BT: 8, BTL: 9, Thi: 8.2</td>
+                      <td>L04</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>2</td>
+                      <td>CI1003</td>
+                      <td>Vẽ kỹ thuật</td>
+                      <td>7.6</td>
+                      <td>B</td>
+                      <td>4</td>
+                      <td>BT: 7.5, BTL: 8, TH: 8, Thi: 7</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>3</td>
+                      <td>MT2013</td>
+                      <td>Xác xuất thống kê</td>
+                      <td>7.9</td>
+                      <td>B</td>
+                      <td>4</td>
+                      <td>KT: 7.5, BT: 9, BTL: 9, Thi: 7</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2024 - 2025 / Học kỳ 2</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="3" class="text-end">Tổng kết</td>
+                      <td>Tích lũy học kỳ: 3.1</td>
+                      <td>Tín chỉ tích lũy học kỳ:20</td>
+                      <td colspan="2">Tích lũy chung: 1.9</td>
+                      <td colspan="2">Tín chỉ tích lũy chung: 63</td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;"> <td>1</td>
+                      <td>LA1009</td>
+                      <td>Anh văn 4</td>
+                      <td>8.5</td>
+                      <td>B+</td>
+                      <td>2</td>
+                      <td>KT: 9, BT: 7.5, BTL: 7, Thi: 8.5</td>
+                      <td>L04</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>2</td>
+                      <td>SP1031</td>
+                      <td>Triết học Mác - Lênin</td>
+                      <td>7.3</td>
+                      <td>B</td>
+                      <td>3</td>
+                      <td>BT: 8, BTL: 8, Thi: 6.5</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>3</td>
+                      <td>MA2035</td>
+                      <td>Công nghệ Vật liệu</td>
+                      <td>7.6</td>
+                      <td>B</td>
+                      <td>3</td>
+                      <td>KT: 7.5, BT: 9, BTL: 9, Thi: 7</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>4</td>
+                      <td>MA2037</td>
+                      <td>Hóa lý - Công nghệ Vật liệu</td>
+                      <td>7.8</td>
+                      <td>B</td>
+                      <td>3</td>
+                      <td>KT: 6.5, BT: 9, TN: 8, Thi: 8</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                    <tr style="background-color: #fff3cd;">
+                      <td>5</td>
+                      <td>EE1005</td>
+                      <td>Kỹ thuật điện</td>
+                      <td>8.8</td>
+                      <td>A</td>
+                      <td>3</td>
+                      <td>BT: 10, Thi: 8.3</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>6</td>
+                      <td>MA2039</td>
+                      <td>Hóa hữu Cơ - Công nghệ Vật liệu</td>
+                      <td>8.4</td>
+                      <td>B+</td>
+                      <td>3</td>
+                      <td>TN: 9, Thi: 7.8</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+                     <tr style="background-color: #fff3cd;">
+                      <td>7</td>
+                      <td>IM1013</td>
+                      <td>Kinh tế học Đại cương</td>
+                      <td>6.1</td>
+                      <td>C</td>
+                      <td>3</td>
+                      <td>KT: 5.5, BT: 7, BTL: 7, Thi: 6</td>
+                      <td>L01</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2024 - 2025 / Học kỳ 1 (Đang cập nhật)</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2023 - 2024 / Học kỳ 2 (Đang cập nhật)</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2023 - 2024 / Học kỳ 1 (Đang cập nhật)</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2022 - 2023 / Học kỳ 2 (Đang cập nhật)</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td colspan="9" class="text-start">Năm học 2022 - 2023 / Học kỳ 1 (Đang cập nhật)</td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+              </div>
+            </div>
+        
+            <div class="tab-pane fade" id="tuong-duong-pane" role="tabpanel" aria-labelledby="tuong-duong-tab">
+              <div class="p-3">
+                <p>Đang cập nhật</p>
+              </div>
+            </div>
+        
+            <div class="tab-pane fade" id="diem-khac-pane" role="tabpanel" aria-labelledby="diem-khac-tab">
+               <div class="p-3">
+                <p>Đang cập nhật</p>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+        </div>
+    </main>
+  </div>
+
+  <footer>© myBk - Phòng Đào tạo</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js"></script>
+  <script>
+    // Sidebar toggle
+    document.getElementById('btnToggleSidebar').addEventListener('click', function(){
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+    // Close sidebar on content click (mobile)
+    document.getElementById('contentArea').addEventListener('click', function(){
+      var sb = document.getElementById('sidebar');
+      if(window.innerWidth < 992 && sb.classList.contains('show')) sb.classList.remove('show');
+    });
+
+    // Menu links -> tabs or content panes
+    document.querySelectorAll('[data-tab]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var t = this.getAttribute('data-tab');
+        var tabEl = document.querySelector('#mainTabs a[href="#' + t + '"]');
+        
+        // 1. Ẩn tất cả các tab-pane VÀ hủy kích hoạt tất cả các tab trên thanh tab chính để chỉ một nội dung hiển thị
+        document.querySelectorAll('#contentArea .tab-content > .tab-pane').forEach(p=>p.classList.remove('show','active'));
+        document.querySelectorAll('#mainTabs .nav-link').forEach(l=>l.classList.remove('active'));
+
+        if(tabEl){ 
+          // 2a. Nếu là tab trên thanh tab chính, kích hoạt tab đó (Bootstrap sẽ tự lo việc hiển thị pane tương ứng)
+          var tab = new bootstrap.Tab(tabEl); 
+          tab.show(); 
+        } else {
+          // 2b. Nếu là pane độc lập (như Thời khóa biểu, Kết quả học tập), hiển thị pane đó thủ công
+          var pane = document.getElementById(t);
+          if(pane){
+            pane.classList.add('show','active');
+          }
+        }
+        
+        // Đóng sidebar trên di động
+        if(window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
+      });
+    });
+
+    // Initialize DataTables for tables that exist
+    ['tblCourseRegResult','tblTuitionFeeHistory','tblStudentClass','tblTuition'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el && $.fn.DataTable) $(el).DataTable({responsive:true, pageLength:10});
+    });
+
+    // Language switcher placeholder
+    function setLang(lang){
+      if(lang === 'en'){
+        document.getElementById('pageTitle').innerText = 'Management System';
+        document.getElementById('pageSubtitle').innerText = 'User management';
+      } else {
+        document.getElementById('pageTitle').innerText = 'Hệ thống quản lý';
+        document.getElementById('pageSubtitle').innerText = 'Quản lý người dùng';
+      }
+    }
+    
+    // Đảm bảo không có nội dung nào được hiển thị khi trang load lần đầu (áp dụng cho các tab không phải là main-tab)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mở menu Sinh viên mặc định
+        var sinhvienCollapse = document.getElementById('menu-sinhvien');
+        if (sinhvienCollapse) {
+            sinhvienCollapse.classList.add('show');
+        }
+        
+        // Xóa trạng thái active/show khỏi tất cả các pane khi DOMContentLoaded
+        document.querySelectorAll('#contentArea .tab-content > .tab-pane').forEach(p => p.classList.remove('show', 'active'));
+        document.querySelectorAll('#mainTabs .nav-link').forEach(l => l.classList.remove('active'));
+    });
+  </script>
+</body>
+</html>
